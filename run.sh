@@ -1,1 +1,1 @@
-cd build && qmake-qt4 .. && make && ./mandelbrot
+cd build && qmake-qt4 ../src && make && ./mandelbrot
