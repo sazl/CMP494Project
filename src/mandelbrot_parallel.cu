@@ -24,7 +24,7 @@ const float Y_SCALE = 2.5;
 const float X_ADJUST = 2;
 const float Y_ADJUST = 1.25;
 
-__global__ void render(uchar *image, uint width, uint height, uint max_iterations) {
+__global__ void render(uchar* image, uint width, uint height, uint max_iterations) {
     uint x_dim = blockIdx.x*blockDim.x + threadIdx.x;
     uint y_dim = blockIdx.y*blockDim.y + threadIdx.y;
     uint index = BYTES_PER_PIXEL * (width * y_dim + x_dim);
@@ -68,13 +68,13 @@ __global__ void render(uchar *image, uint width, uint height, uint max_iteration
     }
 }
 
-void run_mandelbrot(uint width, uint height, uint max_iterations)
+void run_mandelbrot(const char* file_name, uint width, uint height, uint max_iterations)
 {
     // Allocate device and host image memory. Multipied by 3 for RGB pixel values.
     size_t buffer_size = sizeof(uchar) * width * height * BYTES_PER_PIXEL;
-    uchar *image;
+    uchar* image;
     cudaMalloc((void**) &image, buffer_size);
-    uchar *host_image = (uchar *) malloc(buffer_size);
+    uchar* host_image = (uchar*) malloc(buffer_size);
 
     // Render image
     dim3 blockDim(BLOCK_DIM_X, BLOCK_DIM_Y);
@@ -83,21 +83,22 @@ void run_mandelbrot(uint width, uint height, uint max_iterations)
 
     // Copy device image to host and output to png file
     cudaMemcpy(host_image, image, buffer_size, cudaMemcpyDeviceToHost);
-    lodepng_encode24_file("output.png", host_image, width, height);
+    lodepng_encode24_file(file_name, host_image, width, height);
     cudaFree(image);
     free(host_image);
 }
 
-int main(int argc, const char * argv[]) {
+int main(int argc, const char* argv[]) {
 
-    if (argc != 4) {
-        fprintf(stderr, "%s [width] [height] [max_iterations]\n", argv[0]);
+    if (argc != 5) {
+        fprintf(stderr, "%s [width] [height] [max_iterations] [file name]\n", argv[0]);
         return 1;
     }
     
     uint width = (uint) atoi(argv[1]);
     uint height = (uint) atoi(argv[2]);
     uint max_iterations = (uint) atoi(argv[3]);
-    run_mandelbrot(width, height, max_iterations);
+    const char* file_name = argv[4];
+    run_mandelbrot(file_name, width, height, max_iterations);
     return 0;
 }
