@@ -2,13 +2,12 @@
 from __future__ import print_function
 import timeit
 
-PAR_EXEC   = '../build/mandelbrot_parallel'
-SEQ_EXEC   = '../build/mandelbrot'
-NTHREADS   = range(1, 9, 2)
-NRUNS      = 10
-ROWS       = 10000
-COLUMNS    = 10000
-ITERATIONS = 1000
+SEQ_EXEC   = '../bin/mandelbrot'
+PAR_EXEC   = '../bin/mandelbrot_parallel'
+OUTPUT_DIR = '../output/'
+NRUNS      = 5
+WIDTHS     = [2 ** x for x in range(9, 14)]
+ITERATIONS = [2 ** x for x in range(9, 14, 2)]
 
 if __name__ == '__main__':
     times = []
@@ -17,40 +16,47 @@ if __name__ == '__main__':
 
     seq_cmd = """
     subprocess.call(
-        ['{}', '{}'],
+        ['{}', '{}', '{}', '{}', '{}'],
         stdout=open(os.devnull, 'w')
     )
     """
 
     par_cmd = """
     subprocess.call(
-        ['{}', '{}', '{}'],
+        ['{}', '{}', '{}', '{}', '{}'],
         stdout=open(os.devnull, 'w')
     )
     """
 
-    for num_points in NPOINTS:
-        print('num points = ', num_points, '\n')
+    for num_iterations in ITERATIONS:
+        print('num iterations = ', num_iterations, '\n')
         ts, ss, efs = [], [], []
-        for num_thread in NTHREADS:
+        for width in WIDTHS:
+            height = width
             seq_time = timeit.timeit(
-                stmt=seq_cmd.format(SEQ_EXEC, num_points),
+                stmt=seq_cmd.format(SEQ_EXEC, width, height, num_iterations,
+                                    OUTPUT_DIR + '_'.join(map(str, [
+                                        width, height, num_iterations, 'seq.png']))),
                 setup="import subprocess, os",
                 number=NRUNS
             ) / NRUNS
 
-            avg_time = timeit.timeit(
-                stmt=par_cmd.format(PAR_EXEC, num_points, num_thread),
+            par_time = timeit.timeit(
+                stmt=par_cmd.format(PAR_EXEC, width, height, num_iterations,
+                                    OUTPUT_DIR + '_'.join(map(str, [
+                                        width, height, num_iterations, 'par.png']))),
                 setup="import subprocess, os",
                 number=NRUNS
             ) / NRUNS
 
-            speedup = seq_time / avg_time
-            efficiency = speedup / num_thread
-            times.append(avg_time)
+            speedup = seq_time / par_time
+            # efficiency = speedup / num_thread
+            times.append(par_time)
             speedups.append(speedup)
-            efficiencies.append(efficiency)
-            print(','.join(map(str, [seq_time, avg_time,speedup,efficiency])))
+            # efficiencies.append(efficiency)
+            # print(','.join(map(str, [seq_time, par_time,speedup, efficiency])))
+            print('{: <6} {: <6} '.format(width, height), end='')
+            print('{: <15} {: <15} {: <15}'.format(seq_time, par_time, speedup))
         print()
 
     try:
