@@ -17,7 +17,7 @@
      ~RenderThread();
 
      void render(double centerX, double centerY, double scaleFactor,
-                 QSize resultSize);
+                 QSize resultSize, bool gpuRender, int maxIterations);
 
  signals:
      void renderedImage(const QImage &image, double scaleFactor);
@@ -26,19 +26,16 @@
      void run();
 
  private:
-     uint rgbFromWaveLength(double wave);
-
      QMutex mutex;
      QWaitCondition condition;
      double centerX;
      double centerY;
      double scaleFactor;
      QSize resultSize;
+     bool gpuRender;
+     int maxIterations;
      bool restart;
      bool abort;
-
-     enum { ColormapSize = 512 };
-     uint colormap[ColormapSize];
  };
 
  #endif

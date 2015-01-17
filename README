@@ -4,6 +4,7 @@ CMP 494 Project: Mandelbrot Generator in CUDA
 Sami Zeinelabdin - 45619
 Youssef Elkhorazaty - 45550
 
+---------------------------------------------
 Building
 ---------------------------------------------
 
@@ -13,3 +14,20 @@ Building
 
 - Please run: sudo ldconfig /usr/local/cuda/lib64
   Before building, otherwise libcudart will not be found!
+
+---------------------------------------------
+GUI
+---------------------------------------------
+
+The GUI is written in Qt, it can render fractals
+using the GPU or the CPU.
+
+The following shortcuts are available:
+
+R         : Reset fractal position
++         : Zoom in
+-         : Zoom out
+i         : Increase iteration count
+o         : Decrease iteration count
+Arrow Keys: Move around
+Space Bar : Toggle CPU/GPU

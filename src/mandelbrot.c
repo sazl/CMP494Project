@@ -12,7 +12,7 @@ typedef unsigned char uchar;
 #define LERP(x, y, t)                           \
     ((1-t)*x + t*y)
 
-const uint BYTES_PER_PIXEL = 3;
+const uint BYTES_PER_PIXEL = 4;
 const uint BLOCK_DIM_X     = 16;
 const uint BLOCK_DIM_Y     = 16;
 const uint LIMIT           = (1 << 16);
@@ -44,9 +44,10 @@ void render(uchar* image,
             }
 
             if (iteration == max_iterations) {
-                image[index]     = 0;
+                image[index    ] = 0;
                 image[index + 1] = 0;
                 image[index + 2] = 0;
+                image[index + 3] = 0;
             }
             else {
                 // Continous coloring
@@ -62,9 +63,10 @@ void render(uchar* image,
 
                 // Assign RGB values by multiplying the iteration count by a even multiples.
                 // Should replace this with a predefined colormap.
-                image[index]     = ((uint) LERP(color1, color2, t)*2) % max_iterations;
-                image[index + 1] = ((uint) LERP(color1, color2, t)*4) % max_iterations;
-                image[index + 2] = ((uint) LERP(color1, color2, t)*6) % max_iterations;
+                image[index    ] = 1;
+                image[index + 1] = ((uint) LERP(color1, color2, t)*2) % max_iterations;
+                image[index + 2] = ((uint) LERP(color1, color2, t)*4) % max_iterations;
+                image[index + 3] = ((uint) LERP(color1, color2, t)*6) % max_iterations;
             }
         }
     }
@@ -105,7 +107,7 @@ void save_mandelbrot(const char* file_name, uint width, uint height, uint max_it
                    max_iterations,
                    X_SCALE, Y_SCALE,
                    X_ADJUST, Y_ADJUST);
-    lodepng_encode24_file(file_name, host_image, width, height);
+    lodepng_encode32_file(file_name, host_image, width, height);
     free(host_image);
 }
 

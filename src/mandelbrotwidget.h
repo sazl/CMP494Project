@@ -17,16 +17,15 @@
      void resizeEvent(QResizeEvent *event);
      void keyPressEvent(QKeyEvent *event);
      void wheelEvent(QWheelEvent *event);
-     void mousePressEvent(QMouseEvent *event);
-     void mouseMoveEvent(QMouseEvent *event);
-     void mouseReleaseEvent(QMouseEvent *event);
+
 
  private slots:
      void updatePixmap(const QImage &image, double scaleFactor);
      void zoom(double zoomFactor);
 
  private:
-     void scroll(int deltaX, int deltaY);
+     void reset();
+     void scroll(double deltaX, double deltaY);
 
      RenderThread thread;
      QPixmap pixmap;
@@ -36,6 +35,8 @@
      double centerY;
      double pixmapScale;
      double curScale;
+     bool gpuRender;
+     int maxIterations;
  };
 
  #endif
