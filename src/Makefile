@@ -1,4 +1,5 @@
-NVCC = nvcc
+CUDA_DIR = /usr/local/cuda
+NVCC = $(CUDA_DIR)/bin/nvcc
 CUDA_ARCH = sm_20
 
 all: mandelbrot mandelbrot_parallel
