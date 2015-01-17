@@ -68,6 +68,7 @@ __global__ void render(uchar* image, uint width, uint height, uint max_iteration
     }
 }
 
+#ifdef STANDALONE
 void run_mandelbrot(const char* file_name, uint width, uint height, uint max_iterations)
 {
     // Allocate device and host image memory. Multipied by 3 for RGB pixel values.
@@ -102,3 +103,4 @@ int main(int argc, const char* argv[]) {
     run_mandelbrot(file_name, width, height, max_iterations);
     return 0;
 }
+#endif

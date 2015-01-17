@@ -69,6 +69,7 @@ void render(uchar* image, uint width, uint height, uint max_iterations)
     }
 }
 
+#ifdef STANDALONE
 void run_mandelbrot(const char* file_name, uint width, uint height, uint max_iterations)
 {
     size_t buffer_size = sizeof(uchar) * width * height * BYTES_PER_PIXEL;
@@ -92,3 +93,4 @@ int main(int argc, const char* argv[]) {
     run_mandelbrot(file_name, width, height, max_iterations);
     return 0;
 }
+#endif

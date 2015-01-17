@@ -1,18 +1,15 @@
 NVCC = nvcc
+CUDA_ARCH = sm_20
 
 all: mandelbrot mandelbrot_parallel
 
 mandelbrot: mandelbrot.c lodepng.o
-	$(CXX) $(CFLAGS) -o $@ $^ -lm
-
+	$(CXX) $(CFLAGS) -o $@ $^ -lm -DSTANDALONE
 mandelbrot_parallel: mandelbrot_parallel.cu lodepng_cuda.o
-	$(NVCC) $(CFLAGS) -arch=sm_20 -o $@ $^
-
+	$(NVCC) $(CFLAGS) -arch=$(CUDA_ARCH) -o $@ $^ -DSTANDALONE
 lodepng.o: lodepng.cpp lodepng.h
 	$(CXX) $(CFLAGS) -o $@ -c $<
-
 lodepng_cuda.o: lodepng.cpp lodepng.h
-	$(NVCC) $(CFLAGS) -arch=sm_20 -o $@ -c $<
-
+	$(NVCC) $(CFLAGS) -arch=$(CUDA_ARCH) -o $@ -c $<
 clean:
-	rm -f *.o mandelbrot mandelbrot_parallel output.png
+	rm -f *.o mandelbrot mandelbrot_parallel
