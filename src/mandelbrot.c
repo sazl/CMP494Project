@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "lodepng.h"
+#include "mandelbrot.h"
 
 typedef unsigned int uint;
 typedef unsigned char uchar;
@@ -16,19 +17,19 @@ const uint BLOCK_DIM_X     = 16;
 const uint BLOCK_DIM_Y     = 16;
 const uint LIMIT           = (1 << 16);
 
-// Scales the x-axis and y-axis, centers the mandelbrot
-const float X_SCALE = 3.25;
-const float Y_SCALE = 2.5;
-const float X_ADJUST = 2;
-const float Y_ADJUST = 1.25;
-
-void render(uchar* image, uint width, uint height, uint max_iterations)
+void render(uchar* image,
+            uint width, uint height,
+            uint max_iterations,
+            float x_scale,
+            float y_scale,
+            float x_adjust,
+            float y_adjust)
 {
     for (uint x_dim = 0; x_dim < width; x_dim++) {
         for (uint y_dim = 0; y_dim < height; y_dim++) {
             uint index = BYTES_PER_PIXEL * (width * y_dim + x_dim);
-            float x_origin = ((float) x_dim/width)*X_SCALE - X_ADJUST;
-            float y_origin = ((float) y_dim/width)*Y_SCALE - Y_ADJUST;
+            float x_origin = ((float) x_dim/width)*x_scale - x_adjust;
+            float y_origin = ((float) y_dim/width)*y_scale - y_adjust;
 
             float x = 0.0;
             float y = 0.0;
@@ -69,12 +70,41 @@ void render(uchar* image, uint width, uint height, uint max_iterations)
     }
 }
 
-#ifdef STANDALONE
-void run_mandelbrot(const char* file_name, uint width, uint height, uint max_iterations)
+void run_mandelbrot(uchar** out_image,
+                    size_t* image_size,
+                    uint width, uint height,
+                    uint max_iterations,
+                    float x_scale, float y_scale,
+                    float x_adjust, float y_adjust)
 {
     size_t buffer_size = sizeof(uchar) * width * height * BYTES_PER_PIXEL;
     uchar* host_image = (uchar*) malloc(buffer_size);
-    render(host_image, width, height, max_iterations);
+    render(host_image,
+           width, height,
+           max_iterations,
+           x_scale, y_scale,
+           x_adjust, y_adjust);
+    *out_image = host_image;
+    *image_size = buffer_size;
+}
+
+#ifdef STANDALONE
+
+// Scales the x-axis and y-axis, centers the mandelbrot
+const float X_SCALE = 3.25;
+const float Y_SCALE = 2.5;
+const float X_ADJUST = 2;
+const float Y_ADJUST = 1.25;
+
+void save_mandelbrot(const char* file_name, uint width, uint height, uint max_iterations)
+{
+    uchar* host_image;
+    size_t image_size;
+    run_mandelbrot(&host_image, &image_size,
+                   width, height,
+                   max_iterations,
+                   X_SCALE, Y_SCALE,
+                   X_ADJUST, Y_ADJUST);
     lodepng_encode24_file(file_name, host_image, width, height);
     free(host_image);
 }
@@ -90,7 +120,8 @@ int main(int argc, const char* argv[]) {
     uint height = (uint) atoi(argv[2]);
     uint max_iterations = (uint) atoi(argv[3]);
     const char* file_name = argv[4];
-    run_mandelbrot(file_name, width, height, max_iterations);
+    save_mandelbrot(file_name, width, height, max_iterations);
     return 0;
 }
+
 #endif

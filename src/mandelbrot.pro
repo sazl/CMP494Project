@@ -13,7 +13,7 @@ HEADERS = mandelbrotwidget.h \
 SOURCES = main.cpp \
           mandelbrotwidget.cpp \
           renderthread.cpp \
-          mandelbrot.c \
+          mandelbrot.c
 
 QMAKE_CFLAGS += -std=c99
 
@@ -34,8 +34,8 @@ cuda.commands = $$CUDA_DIR/bin/nvcc -m64 -O3 -arch=$$CUDA_ARCH -c $$NVCC_FLAGS \
                 $$CUDA_INC $$LIBS  ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
  
 cuda.dependency_type = TYPE_C
-# cuda.depend_command = $$CUDA_DIR/bin/nvcc -O3 -M $$CUDA_INC $$NVCC_FLAGS \
-#                      ${QMAKE_FILE_NAME}
+cuda.depend_command = $$CUDA_DIR/bin/nvcc -O3 -M $$CUDA_INC $$NVCC_FLAGS \
+                      ${QMAKE_FILE_NAME}
 cuda.input = CUDA_SOURCES
 cuda.output = ${OBJECTS_DIR}${QMAKE_FILE_BASE}_cuda.o
 QMAKE_EXTRA_COMPILERS += cuda
