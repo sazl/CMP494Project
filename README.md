@@ -52,8 +52,8 @@ using the GPU or the CPU.
 The following shortcuts are available:
 
 R         : Reset fractal position
-+         : Zoom in
--         : Zoom out
+\+         : Zoom in
+\-         : Zoom out
 i         : Increase iteration count
 o         : Decrease iteration count
 S         : Take a screenshot, saves as 'out.png' in the present directory
@@ -65,7 +65,9 @@ Space Bar : Toggle CPU/GPU
 Directories
 =============================================
 
-bench/   Benchmarks files and script
-bin/     Binary files
-output/  Output image files
-src/     Project source code
+| Directory | Description               |
+|---------|-----------------------------|
+| bench/  | Benchmarks files and script |
+| bin/    | Binary files                |
+| output/ | Output image files          |
+| src/    | Project source code         |
