@@ -1,8 +1,10 @@
 CMP 494 Project: Mandelbrot Generator in CUDA
 ---------------------------------------------
 
-Sami Zeinelabdin - 45619
-Youssef Elkhorazaty - 45550
+| Name                | ID    |
+|---------------------|-------|
+| Sami Zeinelabdin    | 45619 |
+| Youssef Elkhorazaty | 45550 |
 
 =============================================
 Building
@@ -51,14 +53,16 @@ using the GPU or the CPU.
 
 The following shortcuts are available:
 
-R         : Reset fractal position
-\+         : Zoom in
-\-         : Zoom out
-i         : Increase iteration count
-o         : Decrease iteration count
-S         : Take a screenshot, saves as 'out.png' in the present directory
-Arrow Keys: Move around
-Space Bar : Toggle CPU/GPU
+| Key        | Description               |
+|------------|---------------------------|
+| R          | Reset fractal position    |
+| \+         | Zoom in                   |
+| \-         | Zoom out                  |
+| i          | Increase iteration count  |
+| o          | Decrease iteration count  |
+| s          | Take a screenshot, saves as 'out.png' in the present directory |
+| Arrow Keys | Move around               |
+| Space Bar  | Toggle CPU/GPU            |
 
 
 =============================================
