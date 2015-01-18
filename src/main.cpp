@@ -6,6 +6,7 @@
  {
      QApplication app(argc, argv);
      MandelbrotWidget widget;
+     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
      widget.show();
      return app.exec();
  }

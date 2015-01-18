@@ -7,6 +7,8 @@
 const double DefaultCenterX = 2.0f;
 const double DefaultCenterY = 1.5f;
 const double DefaultScale = 3.0f;
+const int DefaultWidth = 512;
+const int DefaultHeight = 512;
 
 const int DefaultMaxIterations = 1000;
 
@@ -29,7 +31,13 @@ MandelbrotWidget::MandelbrotWidget(QWidget *parent)
             this, SLOT(updatePixmap(QImage,double)));
 
     setWindowTitle(tr("Mandelbrot"));
-    resize(1024, 1024);
+    resize(DefaultWidth, DefaultHeight);
+    setFixedSize(size());
+}
+
+void MandelbrotWidget::closeEvent(QCloseEvent * /* event */)
+{
+    std::exit(0);
 }
 
 void MandelbrotWidget::paintEvent(QPaintEvent * /* event */)

@@ -17,7 +17,7 @@
      void resizeEvent(QResizeEvent *event);
      void keyPressEvent(QKeyEvent *event);
      void wheelEvent(QWheelEvent *event);
-
+     void closeEvent(QCloseEvent *event);
 
  private slots:
      void updatePixmap(const QImage &image, double scaleFactor);

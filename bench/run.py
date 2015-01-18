@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from __future__ import print_function
 import timeit
+import sys
 
 SEQ_EXEC   = '../bin/mandelbrot'
 PAR_EXEC   = '../bin/mandelbrot_parallel'
@@ -34,7 +35,7 @@ if __name__ == '__main__':
         ts, ss, efs = [], [], []
         for width in WIDTHS:
             height = width
-            print('width = {: <6} height = {: <6} '.format(width, height))
+            print('{: <6} {: <6} '.format(width, height))
             seq_time = timeit.timeit(
                 stmt=seq_cmd.format(SEQ_EXEC, width, height, num_iterations,
                                     OUTPUT_DIR + '_'.join(map(str, [
@@ -42,17 +43,16 @@ if __name__ == '__main__':
                 setup="import subprocess, os",
                 number=NRUNS
             ) / NRUNS
-
+            print(seq_time)
+            sys.stdout.flush()
+            
             for dim in BLOCK_DIM:
                 block_dim_x, block_dim_y = dim, dim
                 grid_dim_x, grid_dim_y = width/block_dim_x, height/block_dim_y
-                num_thread = block_dim_x * block_dim_y * grid_dim_x * grid_dim_y
-                print(('block_dim_x = {: <5} block_dim_y = {: <5}' +
-                       ' grid_dim_x = {: <5} grid_dim_y = {: <5}'  +
-                       ' num_threads = {: <10}').format(
+                print(('{: <5} {: <5} ' +
+                       '{: <5} {: <5}').format(
                            block_dim_x, block_dim_y,
-                           grid_dim_x, grid_dim_y,
-                           num_thread
+                           grid_dim_x, grid_dim_y
                        ))
                 
                 par_time = timeit.timeit(
@@ -67,14 +67,15 @@ if __name__ == '__main__':
                 ) / NRUNS
 
                 speedup = seq_time / par_time
-                efficiency = speedup / num_thread
                 times.append(par_time)
                 speedups.append(speedup)
-                efficiencies.append(efficiency)
-                print('{: <15} {: <15} {: <15} {: <15}'.format(
-                    seq_time, par_time, speedup, efficiency))
+                print('{: <15} {: <15}'.format(
+                    par_time, speedup))
+                sys.stdout.flush()
             print()
+            sys.stdout.flush()
         print()
+        sys.stdout.flush()
 
     try:
         import matplotlib.pyplot as plt

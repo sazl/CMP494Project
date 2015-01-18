@@ -1,0 +1,3 @@
+GPU: GT 520, Compute Capability 2.0, 48 Cuda Cores, Video Ram 1024MB
+CPU: Quad core Intel Core 750 @ 2.67GHz, 8MB L3 Cache
+Memory: 8GB DDR3, 1600MHZ
