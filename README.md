@@ -3,8 +3,8 @@ CMP 494 Project: Mandelbrot Generator in CUDA
 
 | Name                | ID    |
 |---------------------|-------|
-| Sami Zeinelabdin    | 45619 |
 | Youssef Elkhorazaty | 45550 |
+| Sami Zeinelabdin    | 45619 |
 
 =============================================
 Building
@@ -39,7 +39,7 @@ bin/mandelbrot_parallel: Parallel GPU CUDA version
 
 - To test the program run:
 
-./output.sh
+./test.sh
 
 This will output 2 files, one from the GPU and one from the CPU in the folder output/
 
